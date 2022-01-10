@@ -40,9 +40,8 @@ function App() {
       <div className="logo">
         <img src={Logo} alt="logo" />
       </div>
-      <Start />
       <Routes>
-        <Route exact path="/start" element={<Start />} />
+        <Route exact path="/" element={<Start  sound={sound}/>} />
         <Route exact path="/discription" element={<Discription  />} />
         <Route  path="/card/:id" element={<Card cards={cards} sound={sound} />} />
       </Routes>

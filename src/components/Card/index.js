@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams ,useNavigate } from "react-router-dom";
 import "./style.css";
 
 const Card = (props) => {
+  const navigate = useNavigate();
   const cards = props.cards;
   const sound = props.sound;
   // const vidio = props.video;
@@ -11,7 +12,7 @@ const Card = (props) => {
   const [openedCard, setOpenedCard] = useState([]);
   const [matched, setMatched] = useState([]);
   const [counter, setCounter] = useState(60);
- 
+  let setSount ;
 
   function flipCard(index) {
     if (!openedCard.includes(index)) {
@@ -19,40 +20,56 @@ const Card = (props) => {
     }
   }
 
+  function playSounds(){
+    sound.currentTime = 0;
+    sound.play();
+   }
+
   const newStart = () => {
     setMatched([]);
     setOpenedCard([]);
     setCounter(60);
-    sound.play();
+ 
     
   };
 
   useEffect(() => {
     const timer =
       counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-
-    if (counter === 0 && matched.length < numOfCards) {
+      sound.addEventListener('ended', playSounds.bind(), false);
+      sound.play();
       
+    if (counter === 0 && matched.length < numOfCards) {
+     
+      sound.removeEventListener('ended', playSounds.bind(), false);
+      sound.pause();
       alert("Time's up, you're lost, try again");
       setMatched([]);
       setOpenedCard([]);
       setCounter(60);
-      sound.play();
+     
+      
       
     }
     if (counter > 0 && matched.length === numOfCards) {
-      
+  
+      sound.removeEventListener('ended', playSounds.bind(), false);
+      sound.pause();
       alert("congratulations for winning, try again");
       setMatched([]);
       setOpenedCard([]);
       setCounter(60);
-      sound.play();
+
+      
       
     }
     return () => {
       clearInterval(timer);
+     
+      sound.removeEventListener('ended', playSounds.bind(), false);
+      sound.pause();
     };
-    // eslint-disable-next-line
+  
   }, [counter]);
 
   useEffect(() => {
@@ -66,8 +83,7 @@ const Card = (props) => {
     }
 
     if (openedCard.length === 2) setTimeout(() => setOpenedCard([]), 1000);
-    sound.play();
-    // eslint-disable-next-line
+
   }, [openedCard]);
 
   useEffect(() => {
@@ -95,11 +111,22 @@ const Card = (props) => {
 
     setNewCards([...cardsNumsEle]);
 
-    sound.play();
-    // eslint-disable-next-line
+   
   }, []);
+
+  const changeRoutedis=()=>{
+ 
+    sound.removeEventListener('ended', playSounds.bind(), false);
+      sound.pause();
+    navigate(`/discription`);
+}
+
+
 // eslint-disable-next-line 
-  return (
+  return (<>
+  <div className="discription">
+            <button onClick={()=>changeRoutedis()} className="explainBtn">Explain</button>
+            </div>
     <div className="counter">
       <div className="timer">
         <button onClick={() => newStart()} className="time1">
@@ -133,6 +160,7 @@ const Card = (props) => {
         })}
       </div>
     </div>
+    </>
   );
 };
 

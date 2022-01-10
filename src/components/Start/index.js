@@ -1,16 +1,18 @@
-import React  from 'react'
+import React, { useEffect }  from 'react'
 import {useNavigate} from 'react-router-dom'
 // import Timer from '../Timer';
 import './style.css'
 
-const Start = () => {
+const Start = ({sound}) => {
     const navigate = useNavigate();
-
+ 
     
 
     const changeRoutedis=()=>{
+       
         navigate(`/discription`);
     }
+ 
     return (
         
             <div className="discription">
